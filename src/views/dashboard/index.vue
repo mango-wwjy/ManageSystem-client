@@ -1,19 +1,32 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+    <div class="dashboard-text">name: {{ msg }}</div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import { getMessage } from '@/api/common'
 
 export default {
   name: 'Dashboard',
+  data(){
+      return {
+          msg: 'Welcome'
+      }
+  },
   computed: {
     ...mapGetters([
       'name'
     ])
-  }
+  },
+    created() {
+        getMessage().then(
+            res => {
+                this.msg = res.data
+            }
+        )
+    }
 }
 </script>
 
