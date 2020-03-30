@@ -49,9 +49,9 @@ export const constantRoutes = [
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
-      name: 'Dashboard',
+      name: '首页',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard' }
     }]
   },
 
@@ -73,6 +73,19 @@ export const constantRoutes = [
         name: 'Tree',
         component: () => import('@/views/tree/index'),
         meta: { title: 'Tree', icon: 'tree' }
+      }
+    ]
+  },
+
+  {
+    path: '/form',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Form',
+        component: () => import('@/views/form/index'),
+        meta: { title: 'Form', icon: 'form' }
       }
     ]
   },

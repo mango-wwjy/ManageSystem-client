@@ -1,85 +1,166 @@
 <template>
-  <div class="app-container">
-    <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="Activity name">
-        <el-input v-model="form.name" />
-      </el-form-item>
-      <el-form-item label="Activity zone">
-        <el-select v-model="form.region" placeholder="please select your zone">
-          <el-option label="Zone one" value="shanghai" />
-          <el-option label="Zone two" value="beijing" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Activity time">
-        <el-col :span="11">
-          <el-date-picker v-model="form.date1" type="date" placeholder="Pick a date" style="width: 100%;" />
-        </el-col>
-        <el-col :span="2" class="line">-</el-col>
-        <el-col :span="11">
-          <el-time-picker v-model="form.date2" type="fixed-time" placeholder="Pick a time" style="width: 100%;" />
-        </el-col>
-      </el-form-item>
-      <el-form-item label="Instant delivery">
-        <el-switch v-model="form.delivery" />
-      </el-form-item>
-      <el-form-item label="Activity type">
-        <el-checkbox-group v-model="form.type">
-          <el-checkbox label="Online activities" name="type" />
-          <el-checkbox label="Promotion activities" name="type" />
-          <el-checkbox label="Offline activities" name="type" />
-          <el-checkbox label="Simple brand exposure" name="type" />
-        </el-checkbox-group>
-      </el-form-item>
-      <el-form-item label="Resources">
-        <el-radio-group v-model="form.resource">
-          <el-radio label="Sponsor" />
-          <el-radio label="Venue" />
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="Activity form">
-        <el-input v-model="form.desc" type="textarea" />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Create</el-button>
-        <el-button @click="onCancel">Cancel</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="welcome-page">
+    <vue-particles
+      color="#ffffff"
+      :particleOpacity="0.7"
+      :particlesNumber="50"
+      shapeType="circle"
+      :particleSize="4"
+      linesColor="#dedede"
+      :linesWidth="1"
+      :lineLinked="true"
+      :lineOpacity="0.4"
+      :linesDistance="150"
+      :moveSpeed="2"
+      :hoverEffect="true"
+      hoverMode="grab"
+      :clickEffect="true"
+      clickMode="push"
+    >
+    </vue-particles>
+    <div class="welcome-page-center">
+      <div class="welcome-page-content">
+        <div class="welcome-page-title">系统名称</div>
+        <div
+          v-for="(item, index) in topNav"
+          :key="index"
+          class="nav-item-group">
+          <div class="nav-item-title">
+            {{item.title}}
+          </div>
+          <div>
+            <label
+              v-for="(item2, index) in item.children"
+              :key="index"
+              class="nav-item"
+              @click="jumpSystem(item2.path)">
+              {{item2.name}}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      }
+    export default {
+        name: 'HelloWorld',
+        data() {
+            return {
+                topNav:[{
+                    title:"子标题",
+                    children:[
+                        {
+                            name:"系统入口",
+                            path:"https://blog.csdn.net/fifteen718"
+                        }
+                    ]
+                },{
+                    title:"子标题",
+                    children:[
+                        {
+                            name:"系统入口",
+                            path:"https://blog.csdn.net/fifteen718"
+                        },{
+                            name:"系统入口",
+                            path:"https://blog.csdn.net/fifteen718"
+                        }
+                    ]
+                },{
+                    title:"子标题",
+                    children:[
+                        {
+                            name:"系统入口",
+                            path:"https://blog.csdn.net/fifteen718"
+                        },{
+                            name:"系统入口",
+                            path:"https://blog.csdn.net/fifteen718"
+                        },{
+                            name:"系统入口",
+                            path:"https://blog.csdn.net/fifteen718"
+                        }
+                    ]
+                }]
+            }
+        },
+        methods: {
+            jumpSystem(path) {
+                window.open(path);
+            }
+        }
     }
-  },
-  methods: {
-    onSubmit() {
-      this.$message('submit!')
-    },
-    onCancel() {
-      this.$message({
-        message: 'cancel!',
-        type: 'warning'
-      })
-    }
-  }
-}
 </script>
 
 <style scoped>
-.line{
-  text-align: center;
-}
+  .welcome-page {
+    font-size: 16px;
+    color: #fff;
+    /*background: url(../assets/background.jpg) no-repeat;*/
+    min-height: 100vh;
+  }
+  .welcome-page-center {
+    width: 70%;
+    height: 50%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+  }
+  .welcome-page-title {
+    font-size: 42px;
+    padding-top: 10px;
+    text-align: center;
+    user-select:none;
+  }
+  .welcome-page-content {
+    background-color: rgba(46,46,46,.61);
+    border-radius: 10px;
+    box-shadow: 0 0 20px 0 #f0f8ff;
+  }
+  .nav-item-group {
+    padding: 18px 0;
+  }
+  .nav-item-title {
+    font-size: 22px;
+    padding-left: 20px;
+  }
+  .nav-item {
+    display: inline-block;
+    min-width: 128px;
+    padding: 5px 10px;
+    text-align: center;
+    background: transparent;
+    border: 1px solid #FFF;
+    color: #f0f8ff;
+    text-shadow: 0 0 0;
+    border-radius: 5px;
+    margin: 10px 20px;
+  }
+  .nav-item:hover {
+    cursor: pointer;
+    animation: .5s ease-in-out 0s 1 normal both running pulsate-bck;
+  }
+  @-webkit-keyframes pulsate-bck {
+    0%,to {
+      -webkit-transform: scale(1);
+      transform: scale(1)
+    }
+    50% {
+      -webkit-transform: scale(.9);
+      transform: scale(.9)
+    }
+  }
+  @keyframes pulsate-bck {
+    0%,to {
+      -webkit-transform: scale(1);
+      transform: scale(1)
+    }
+    50% {
+      -webkit-transform: scale(.9);
+      transform: scale(.9)
+    }
+  }
 </style>
-
