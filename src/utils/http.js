@@ -1,5 +1,6 @@
 import ax from 'axios'
 import router from '../router'
+import {Message} from "element-ui";
 
 const server = ax.create({
   withCredentials: true,
@@ -50,6 +51,13 @@ server.interceptors.response.use(
   error => {
     if (error.response && error.response.status === 404) {
       router.push('/')
+    }
+    if(error.response && error.response.status === 400){
+      Message({
+        message: '获取token失败，请检查用户名和密码是否正确',
+        type: 'error',
+        duration: 5 * 1000
+      })
     }
     return Promise.reject(error.response)
   }

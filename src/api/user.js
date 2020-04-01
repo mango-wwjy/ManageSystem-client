@@ -40,3 +40,6 @@ export function getUserInfo(token) {
   })
 }
 
+export function logout() {
+  return http.post('/api/user/logout')
+}

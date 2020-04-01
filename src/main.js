@@ -8,6 +8,10 @@ import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
 
+import 'element-ui/lib/theme-chalk/base.css';
+// collapse 展开折叠
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+
 import App from './App'
 import store from './store'
 import router from './router'
@@ -19,7 +23,7 @@ import VueParticles from 'vue-particles'
 
 Vue.use(VueParticles)
 
-
+Vue.component(CollapseTransition.name, CollapseTransition)
 // set ElementUI lang to EN
 //Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
