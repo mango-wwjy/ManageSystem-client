@@ -5,7 +5,7 @@ export function login(data) {
 }
 
 export function register(data) {
-  return http.put('/api/user', data)
+  return http.post('/api/user/register', data)
 }
 
 export function updateUser(data) {

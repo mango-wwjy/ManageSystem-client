@@ -11,11 +11,19 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
+
+          <router-link to="/profile/index">
+            <el-dropdown-item>个人中心</el-dropdown-item>
+          </router-link>
+
           <router-link to="/">
             <el-dropdown-item>
               主页
             </el-dropdown-item>
+
           </router-link>
+
+
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">退出系统</span>
           </el-dropdown-item>

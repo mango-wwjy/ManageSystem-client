@@ -68,7 +68,7 @@
         <el-col :span="18">
            <el-form-item prop="randomCode" style="width: 300px;">
         <span class="svg-container">
-          <svg-icon icon-class="user" />
+          <svg-icon icon-class="checkCode" />
         </span>
              <el-input
                ref="randomCode"
@@ -108,64 +108,76 @@
         <h3 class="title">用户注册</h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="userName">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="请输入用户名"
-          name="username"
+          ref="userName"
+          v-model="registerForm.userName"
+          placeholder="请输入账户名"
+          name="userName"
           type="text"
           tabindex="1"
           auto-complete="on"
         />
       </el-form-item>
 
-      <el-form-item prop="username">
+      <el-form-item prop="userPassword">
       <span class="svg-container">
-          <svg-icon icon-class="user" />
+          <svg-icon icon-class="password" />
         </span>
       <el-input
-        ref="username"
-        v-model="loginForm.username"
-        placeholder="请输入用户名"
-        name="username"
+        ref="userPassword"
+        v-model="registerForm.userPassword"
+        :type="passwordType"
+        placeholder="密码"
+        name="userPassword"
         type="text"
         tabindex="1"
         auto-complete="on"
-      />
-      </el-form-item>
 
-      <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="loginForm.password"
-          :type="passwordType"
-          placeholder="请输入密码"
-          name="password"
-          tabindex="2"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
-        />
+      />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
+
+      <el-form-item prop="radio" >
+        <span class="svg-container">
+          <svg-icon icon-class="registerType" />
+        </span>
+        <el-radio-group v-model="radio" @change="changeType">
+          <el-radio :label="3">学生</el-radio>
+          <el-radio :label="6">老师</el-radio>
+        </el-radio-group>
+      </el-form-item>
+
+
+      <el-form-item prop="authId" v-show="showInputOwn">
+      <span class="svg-container">
+          <svg-icon icon-class="stuNo" />
+        </span>
+        <el-input
+          ref="authId"
+          v-model="registerForm.authId"
+          :placeholder="inputTitle"
+          name="authId"
+          type="text"
+          tabindex="1"
+          auto-complete="on"
+        />
+      </el-form-item>
+
       <el-row :gutter="20">
         <el-col :span="18">
           <el-form-item prop="randomCode" style="width: 300px;">
         <span class="svg-container">
-          <svg-icon icon-class="user" />
+          <svg-icon icon-class="checkCode" />
         </span>
             <el-input
               ref="randomCode"
-              v-model="loginForm.randomCode"
+              v-model="registerForm.randomCode"
               placeholder="请输入验证码"
               name="username"
               type="text"
@@ -182,7 +194,8 @@
       </el-row>
 
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button v-show="loginOpen" :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
+      <el-button v-show="open" :loading="registerLoading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleRegister">注册</el-button>
 
 
 
@@ -201,6 +214,8 @@
 
 <script>
 
+
+import {register} from "../../api/user";
 
 export default {
   name: 'Login',
@@ -233,6 +248,14 @@ export default {
             callback()
         }
     }
+      let checkRadio =(rule, value, callback) => {
+
+          if(!this.radio){
+              return callback(new Error('请选择注册类型'))
+          } else {
+              callback()
+          }
+      }
     return {
         loginForm: {
           username: '',
@@ -240,15 +263,30 @@ export default {
           password: ''
       },
         registerForm:{
+            userName:'',
+            userPassword:'',
+            authId:'',
+            randomCode:'',
+            registerType:'',
 
         },
+        radio:'',
+        inputTitle:'',
+        showInputOwn:false,
+        registerLoading:false,
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }],
         randomCode:[{required:true,trigger:'blur',validator: validateCode}]
       },
         registerRules:{
-
+            userName: [{ required: true, trigger: 'blur', validator: validateUsername }],
+            userPassword: [{ required: true, trigger: 'blur', validator: validatePassword }],
+            authId:[{required: true, trigger: 'blur',message:'此处不能为空'}],
+            randomCode:[{required:true,trigger:'blur',validator: validateCode}],
+            radio:[
+                { required: true, validator: checkRadio, trigger: "blur" },
+            ],
         },
       loading: false,
       passwordType: 'password',
@@ -274,13 +312,31 @@ export default {
       this.createCode();
     },
   methods: {
+      changeType(){
+        if(this.radio){
+            if(this.radio === 3){
+                this.inputTitle='请输入您的学号';
+            }
+            if(this.radio === 6){
+                this.inputTitle='请输入您的工号';
+            }
+            this.showInputOwn=true;
+        }
+
+      },
     openRegister(){
-        this.open=true
-        this.loginOpen=false
+        this.open=true;
+        this.loginOpen=false;
+        this.createCode();
+        this.$refs['registerForm'].clearValidate() // 清除整个表单的校验
+        this.$refs['loginForm'].clearValidate() // 清除整个表单的校验
     },
     openLogin(){
-      this.open=false
-      this.loginOpen=true
+      this.open=false;
+      this.loginOpen=true;
+        this.createCode();
+        this.$refs['registerForm'].clearValidate() // 清除整个表单的校验
+        this.$refs['loginForm'].clearValidate() // 清除整个表单的校验
     },
     showPwd() {
       if (this.passwordType === 'password') {
@@ -292,23 +348,44 @@ export default {
         this.$refs.password.focus()
       })
     },
+
+      handleRegister(){
+          this.$refs.registerForm.validate(valid => {
+              if(valid){
+                  this.registerLoading = true;
+                  if(this.registerForm){
+                      if(this.radio===3){
+                          this.registerForm.registerType='user';
+                      }
+                      if(this.radio===6){
+                          this.registerForm.registerType='teacher'
+                      }
+                  }
+                  register(this.registerForm).then(res => {
+                      if(res.data.code=='0'){
+                          this.msgSuccess(res.data.msg)
+                      }else {
+                          this.msgError(res.data.msg)
+                      }
+                      this.registerLoading = false;
+                  }).catch(() => {
+                      this.msgInfo("响应超时，请稍后再试！")
+                      this.registerLoading = false;
+                  })
+              }
+          })
+      }  ,
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then((res) => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-              // if(){
-              //     this.$message({
-              //         message: '登陆成功',
-              //         type: 'success',
-              //         duration: 3000
-              //     })
-              // }
-
+          this.$store.dispatch('user/login', this.loginForm).then(res => {
+              this.$router.push({ path: this.redirect || '/' })
+              this.loading = false
+              this.msgSuccess("登陆成功");
           }).catch(() => {
             this.loading = false
+              this.msgError("登陆失败，请检查用户名或密码");
           })
         } else {
           console.log('error submit!!')
