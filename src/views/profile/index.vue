@@ -46,9 +46,10 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'name',
+      'realName',
       'avatar',
-      'roles'
+      'roles',
+      'userEmail'
     ])
   },
   created() {
@@ -57,11 +58,14 @@ export default {
   methods: {
     getUser() {
       this.user = {
-        name: this.name,
+        name: this.realName,
         role: this.roles.join(' | '),
-        email: 'admin@test.com',
+        email: this.userEmail,
         avatar: this.avatar
       }
+
+        console.log(this.roles)
+        console.log(this.user.role)
     }
   }
 }

@@ -5,6 +5,7 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
+import {GetUrlRelativePath} from "@/utils/common";
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -31,12 +32,17 @@ router.beforeEach(async(to, from, next) => {
         next()
       } else {
         try {
+          const fromPath = GetUrlRelativePath(window.location.href)
           // get user info
-          await store.dispatch('user/getInfo')
-          next()
+          const { roles } = await store.dispatch('user/getInfo')
+          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+          // dynamically add accessible routes
+          router.addRoutes(accessRoutes)
+          next({ path: fromPath })
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')
+          Message.error(error || 'Has Error')
           next(`/login?redirect=${to.path}`)
           NProgress.done()
         }
@@ -50,6 +56,7 @@ router.beforeEach(async(to, from, next) => {
       next()
     } else {
       // other pages that do not have permission to access are redirected to the login page.
+      Message.error('账号或者密码错误或者登录超时失效')
       next(`/login?redirect=${to.path}`)
       NProgress.done()
     }

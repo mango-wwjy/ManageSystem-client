@@ -89,20 +89,6 @@ export const constantRoutes = [
       }
     ]
   },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-
   {
     path: '/nested',
     component: Layout,
@@ -182,7 +168,7 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/profile/index'),
         name: 'Profile',
-        meta: { title: '个人中心', icon: 'user', noCache: true }
+        meta: { title: '个人中心', icon: 'user' }
       }
     ]
   },
@@ -191,6 +177,24 @@ export const constantRoutes = [
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
+
+export const asyncRoutes = [
+
+  {
+    path: '/student',
+    component: Layout,
+    children: [
+      {
+        path: 'studentInfo',
+        name: 'Student',
+        component: () => import('@/views/student/studentInfo'),
+        meta: { title: '学生管理', icon: 'form', roles: ['admin'] }
+      }
+    ]
+  },
+
+]
+
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support

@@ -19,6 +19,8 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+import * as filters from './filters' // global filters
+
 import VueParticles from 'vue-particles'
 
 Vue.use(VueParticles)
@@ -41,6 +43,11 @@ Vue.prototype.msgError = function (msg) {
 Vue.prototype.msgInfo = function (msg) {
   this.$message.info(msg);
 }
+
+// register global utility filters
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
 
 Vue.config.productionTip = false
 

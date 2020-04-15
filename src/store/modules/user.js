@@ -10,7 +10,9 @@ const getDefaultState = () => {
     realName:'',
     userEmail:'',
     userPhone:'',
-    authId:''
+    authId:'',
+    introduction: '',
+    roles: []
   }
 }
 
@@ -41,6 +43,12 @@ const mutations = {
   SET_AUTH_ID: (state,authId) => {
     state.authId = authId
   },
+  SET_INTRODUCTION: (state, introduction) => {
+    state.introduction = introduction
+  },
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
+  }
 }
 
 const actions = {
@@ -66,15 +74,22 @@ const actions = {
       getUserInfo(state.token).then(response => {
         const { data } = response
         if (!data) {
-          reject('Verification failed, please Login again.')
+          reject('验证失败，请重新登陆')
         }
-        const { userName, avatar, realName, userEmail, userPhone, authId } = data
+        const { userName, avatar, realName, userEmail, userPhone, authId, introduction, roles } = data
+
+        if (!roles || roles.length <= 0) {
+          reject('角色必须是非零数组！')
+        }
+
         commit('SET_REAL_NAME', realName)
         commit('SET_USER_EMAIL', userEmail)
         commit('SET_USER_PHONE', userPhone)
         commit('SET_AUTH_ID', authId)
         commit('SET_USER_NAME', userName)
         commit('SET_AVATAR', avatar)
+        commit('SET_ROLES', roles)
+        commit('SET_INTRODUCTION', introduction)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -89,6 +104,7 @@ const actions = {
         removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')
+        commit('SET_ROLES', [])
         resolve()
       }).catch(error => {
         reject(error)
@@ -101,6 +117,7 @@ const actions = {
     return new Promise(resolve => {
       removeToken() // must remove  token  first
       commit('RESET_STATE')
+      commit('SET_ROLES', [])
       resolve()
     })
   }
