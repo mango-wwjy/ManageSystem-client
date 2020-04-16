@@ -25,7 +25,7 @@ export function updateUserPass(data) {
 }
 
 export function fetchUser(query) {
-  return http.get('/api/user', { params: query })
+  return http.get('/api/user/fetchUser', { params: query })
 }
 
 export function fetchUserById(id) {
@@ -42,4 +42,9 @@ export function getUserInfo(token) {
 
 export function logout() {
   return http.post('/api/user/logout')
+}
+
+// 导出
+export function exportUser() {
+ return http.get('/api/user/exportUser')
 }

@@ -181,6 +181,30 @@ export const constantRoutes = [
 export const asyncRoutes = [
 
   {
+    path: '/user',
+    component: Layout,
+    children: [
+      {
+        path: 'userInfo',
+        name: 'User',
+        component: () => import('@/views/user/userInfo'),
+        meta: { title: '用户管理', icon: 'form', roles: ['admin'] }
+      }
+    ]
+  },
+  {
+    path: '/teacher',
+    component: Layout,
+    children: [
+      {
+        path: 'teacherInfo',
+        name: 'Teacher',
+        component: () => import('@/views/teacher/teacherInfo'),
+        meta: { title: '用户管理', icon: 'form', roles: ['admin'] }
+      }
+    ]
+  },
+  {
     path: '/student',
     component: Layout,
     children: [

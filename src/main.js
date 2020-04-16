@@ -23,6 +23,8 @@ import * as filters from './filters' // global filters
 
 import VueParticles from 'vue-particles'
 
+import {download} from './utils/common.js';
+
 Vue.use(VueParticles)
 
 Vue.component(CollapseTransition.name, CollapseTransition)
@@ -48,6 +50,8 @@ Vue.prototype.msgInfo = function (msg) {
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
+
+Vue.prototype.download = download
 
 Vue.config.productionTip = false
 

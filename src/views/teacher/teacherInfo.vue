@@ -1,21 +1,21 @@
 <template>
 
   <div class="app-container">
-     <div class="filter-container">
-       <el-input placeholder="学号" style="width: 200px;" class="filter-item"></el-input>
-       <el-input placeholder="学生姓名" style="width: 200px;" class="filter-item"></el-input>
-       <el-input placeholder="请输入检索内容" style="width: 200px;" class="filter-item"></el-input>
+    <div class="filter-container">
+      <el-input placeholder="学号" style="width: 200px;" class="filter-item"></el-input>
+      <el-input placeholder="学生姓名" style="width: 200px;" class="filter-item"></el-input>
+      <el-input placeholder="请输入检索内容" style="width: 200px;" class="filter-item"></el-input>
 
-       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-         搜索
-       </el-button>
-       <el-button class="filter-item" style="margin-left:20px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-         增加
-       </el-button>
-       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-         Export
-       </el-button>
-     </div>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+        搜索
+      </el-button>
+      <el-button class="filter-item" style="margin-left:20px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+        增加
+      </el-button>
+      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+        Export
+      </el-button>
+    </div>
 
     <el-table
       :data="list"
@@ -49,7 +49,7 @@
 
 
     export default {
-        name:'StudentInfo',
+        name:'TeacherInfo',
         components: { Pagination },
         data() {
             return {

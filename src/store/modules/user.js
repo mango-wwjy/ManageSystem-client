@@ -57,7 +57,6 @@ const actions = {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ userName: username.trim(), userPassword: password }).then(response => {
-        debugger
         const { data } = response.data
         commit('SET_TOKEN', data.token)
         setToken(data.token)
@@ -77,7 +76,6 @@ const actions = {
           reject('验证失败，请重新登陆')
         }
         const { userName, avatar, realName, userEmail, userPhone, authId, introduction, roles } = data
-
         if (!roles || roles.length <= 0) {
           reject('角色必须是非零数组！')
         }
