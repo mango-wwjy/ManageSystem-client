@@ -2,8 +2,8 @@
 
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.studentNumber" placeholder="学号" style="width: 200px;" class="filter-item"></el-input>
-      <el-input v-model="listQuery.studentName" placeholder="姓名" style="width: 200px;" class="filter-item"></el-input>
+      <el-input v-model="listQuery.classCode" placeholder="班级编号" style="width: 200px;" class="filter-item"></el-input>
+      <el-input v-model="listQuery.className" placeholder="班级名称" style="width: 200px;" class="filter-item"></el-input>
       <el-input v-model="listQuery.fuzzy" placeholder="请输入检索内容" style="width: 200px;" class="filter-item"></el-input>
 
       <el-button  class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
@@ -22,46 +22,41 @@
       highlight-current-row
       style="width: 100%">
       <el-table-column
-        prop="studentNumber"
-        label="学号"
+        prop="classCode"
+        label="班级编号"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="studentName"
-        label="姓名"
+        prop="className"
+        label="班级名称"
         width="180">
       </el-table-column>
+
       <el-table-column
-        prop="studentClass"
-        label="班级">
+        prop="authName"
+        label="指导教师">
       </el-table-column>
 
       <el-table-column
-        prop="studentEmail"
-        label="邮箱">
+        prop="collegeName"
+        label="所属学院">
       </el-table-column>
 
       <el-table-column
-        prop="studentCollege"
-        label="所在学院">
+        prop="manageTime"
+        label="操作时间">
       </el-table-column>
 
       <el-table-column
-        prop="studentYear"
-        label="入学年份">
+        prop="manageUser"
+        label="操作人">
       </el-table-column>
 
-      <el-table-column
-        prop="studentPhone"
-        label="手机号">
-
-      </el-table-column>
 
       <el-table-column
-        label="状态">
-        <template slot-scope="scope">
-          {{scope.row.status ==='0000' ? '未注册' : '已注册'}}
-        </template>
+        prop="remark"
+        label="备注">
+
       </el-table-column>
 
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
@@ -79,23 +74,41 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="studentInfo" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="dataInfo" label-position="left" label-width="110px" style="width: 400px; margin-left:200px;">
 
-        <el-form-item label="学号" prop="studentNumber">
-          <el-input v-model="studentInfo.studentNumber" placeholder="请输入密码"/>
+        <el-form-item label="班级编号" prop="classCode">
+          <el-input v-model="dataInfo.classCode" placeholder="请输入班级编号"/>
         </el-form-item>
 
-        <el-form-item label="姓名" prop="studentName" placeholder="请输入姓名">
-          <el-input class="filter-item" v-model="studentInfo.studentName" />
-
-        </el-form-item>
-        <el-form-item label="手机号" prop="studentPhone">
-          <el-input v-model="studentInfo.studentPhone"  placeholder="请输入手机号" />
-        </el-form-item>
-        <el-form-item label="邮箱" prop="studentEmail">
-          <el-input v-model="studentInfo.studentEmail" placeholder="请输入邮箱"/>
+        <el-form-item label="班级名称" prop="className" placeholder="请输入班级名称">
+          <el-input class="filter-item" v-model="dataInfo.className" />
         </el-form-item>
 
+        <el-form-item label="指导教师" prop="authId">
+          <el-select v-model="dataInfo.authId" placeholder="请选择指导教师">
+            <el-option
+              v-for="item in teacherDictOptions"
+              :key="item.teacherNumber"
+              :label="item.teacherName"
+              :value="item.teacherNumber">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="所属学院" prop="collegeId">
+          <el-select v-model="dataInfo.collegeId" placeholder="请选择所属学院">
+            <el-option
+              v-for="item in collegeDictOptions"
+              :key="item.collegeCode"
+              :label="item.collegeName"
+              :value="item.collegeCode">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="备注" prop="remark" label-width="80px">
+          <el-input v-model="dataInfo.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注信息" />
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancelUpdate()">
@@ -114,20 +127,14 @@
 <script>
     import Pagination from '@/components/Pagination'
     import {validateIsEmail, validateIsPhone} from "../../utils/validate";
-    import {createStudentInfo, deleteStudent, fetchStudent, updateStudent} from "../../api/student"; // secondary package based on el-pagination
+    import {createData, deleteData, fetchData, updateData} from "../../api/classInfo";
+    import { getCollegeDict, getTeacherInfoDict} from "../../api/common"; // secondary package based on el-pagination
 
 
     export default {
-        name:'StudentInfo',
+        name:'classInfo',
         components: { Pagination },
         data() {
-            const validatePassword = (rule, value, callback) => {
-                if (value.length < 6) {
-                    callback(new Error('密码至少 6 位数'))
-                } else {
-                    callback()
-                }
-            }
             const validatePhone = (rule, value, callback) => {
                 if(value){
                     if (!validateIsPhone(value)) {
@@ -160,47 +167,63 @@
                 listQuery: {
                     page: 1,
                     limit: 10,
-                    studentName:undefined,
-                    studentNumber:undefined,
+                    collegeCode:undefined,
+                    collegeName:undefined,
                     fuzzy:undefined
                 },
                 rules: {
-                    studentPhone: [{ required: true, trigger: 'blur', validator: validatePhone }],
-                    studentEmail: [{ required: true, trigger: 'blur', validator: validateEmail }],
-                    introduction:[{required: true, trigger: 'blur',message:'请输入个人简介'},
+                    remark:[{required: true, trigger: 'blur',message:'请输入备注'},
                         {max:30,message:'最多可输入100位'}
-                    ]
+                    ],
+                    classCode:[{required: true, trigger: 'blur',message:'请输入班级编号'},
+                    ],
+                    className:[{required: true, trigger: 'blur',message:'请输入班级名称'},
+                    ],
+                    authId:[{required: true, trigger: 'blur',message:'请选择指导教师'},
+                    ],
+                    collegeId:[{required: true, trigger: 'blur',message:'请选择所属学院'},
+                    ],
 
 
                 },
                 textMap:{
-                  update:'编辑学生信息',
-                  create:'添加学生信息'
+                    update:'编辑班级信息',
+                    create:'添加班级信息'
                 },
                 dialogStatus: '',
                 dialogFormVisible:false,
-                studentInfo: {
+                dataInfo: {
                     id:undefined,
-                    studentNumber:undefined,
-                    studentName:undefined,
-                    studentClass:undefined,
-                    studentEmail:undefined,
-                    studentCollege:undefined,
-                    studentYear:undefined,
-                    studentPhone:undefined,
-                    studentInformation:undefined,
-                    teacherNumber:undefined,
+                    classCode:undefined,
+                    className:undefined,
+                    authId:undefined,
+                    manageTime:undefined,
+                    manageUser:undefined,
                     remark:undefined,
+                    collegeLevel:undefined,
+                    collegeId:undefined,
                 },
+                collegeDictOptions:[],
+                teacherDictOptions:[],
             }
         },
         created() {
             this.getList()
+            this.initData()
         },
         methods:{
+            initData(){
+                getCollegeDict().then(response => {
+                    this.collegeDictOptions = response.data.data
+                })
+
+                getTeacherInfoDict().then(response => {
+                    this.teacherDictOptions = response.data.data
+                })
+            },
             getList() {
                 this.listLoading = true
-                fetchStudent(this.listQuery).then(response => {
+                fetchData(this.listQuery).then(response => {
                     this.list = response.data.list
                     this.total = response.data.total
 
@@ -222,7 +245,7 @@
                 })
             },
             handleUpdate(row){
-                this.studentInfo = Object.assign({},row)
+                this.dataInfo = Object.assign({},row)
                 this.dialogStatus = 'update'
                 this.dialogFormVisible = true;
                 this.$nextTick(() => {
@@ -231,27 +254,25 @@
 
             },
             resetData(){
-                this.studentInfo = {
-                        id:undefined,
-                        studentNumber:undefined,
-                        studentName:undefined,
-                        studentClass:undefined,
-                        studentEmail:undefined,
-                        studentCollege:undefined,
-                        studentYear:undefined,
-                        studentPhone:undefined,
-                        studentInformation:undefined,
-                        teacherNumber:undefined,
-                        remark:undefined,
+                this.dataInfo = {
+                    id:undefined,
+                    collegeCode:undefined,
+                    collegeName:undefined,
+                    collegeIntroduce:undefined,
+                    collegeDean:undefined,
+                    collegeEmail:undefined,
+                    collegePhone:undefined,
+                    collegeLevel:undefined,
+                    remark:undefined,
                 }
             },
             handleDelete(row, index){
-                this.$confirm('是否确认删除该用户，如果删除，该用户的数据将不能回复，请确认！', "警告", {
+                this.$confirm('是否确认删除该班级信息，如果删除，该数据将不能回复，请确认！', "警告", {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning"
                 }).then(function() {
-                    return deleteStudent(row.id);
+                    return deleteData(row.classCode);
                 }).then(response => {
                     if(response.data.code == '0'){
                         this.msgSuccess(response.data.msg)
@@ -269,7 +290,7 @@
             createData(){
                 this.$refs['dataForm'].validate((valid) => {
                     if (valid) {
-                        createStudentInfo(this.studentInfo).then(response => {
+                        createData(this.dataInfo).then(response => {
                             if(response.data.code =='0'){
                                 this.msgSuccess(response.data.msg)
                                 this.getList();
@@ -284,8 +305,8 @@
             updateData(){
                 this.$refs['dataForm'].validate((valid) => {
                     if (valid) {
-                        const data = Object.assign({}, this.studentInfo)
-                        updateStudent(data).then(response => {
+                        const data = Object.assign({}, this.dataInfo)
+                        updateData(data).then(response => {
                             if(response.data.code =='0'){
                                 this.msgSuccess(response.data.msg)
                                 this.getList();

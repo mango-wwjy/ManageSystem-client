@@ -188,7 +188,7 @@ export const asyncRoutes = [
         path: 'userInfo',
         name: 'User',
         component: () => import('@/views/user/userInfo'),
-        meta: { title: '用户管理', icon: 'form', roles: ['admin'] }
+        meta: { title: '用户管理', icon: 'userInfo', roles: ['admin'] }
       }
     ]
   },
@@ -200,7 +200,7 @@ export const asyncRoutes = [
         path: 'teacherInfo',
         name: 'Teacher',
         component: () => import('@/views/teacher/teacherInfo'),
-        meta: { title: '用户管理', icon: 'form', roles: ['admin'] }
+        meta: { title: '教师管理', icon: 'teacherInfo', roles: ['admin'] }
       }
     ]
   },
@@ -212,11 +212,47 @@ export const asyncRoutes = [
         path: 'studentInfo',
         name: 'Student',
         component: () => import('@/views/student/studentInfo'),
-        meta: { title: '学生管理', icon: 'form', roles: ['admin'] }
+        meta: { title: '学生管理', icon: 'studentInfo', roles: ['admin','teacher'] }
       }
     ]
   },
 
+  {
+    path: '/collegeAndClass',
+    component: Layout,
+    redirect: '/collegeAndClass/collegeInfo',
+    name: 'collegeAndClass',
+    meta: {
+      title: '学院班级管理',
+      icon: 'collegeAndClass'
+    },
+    children: [
+      {
+        path: 'collegeInfo',
+        component: () => import('@/views/college/collegeInfo'), // Parent router-view
+        meta: { title: '学院管理', icon:'college', roles: ['admin'] }
+      },
+      {
+        path: 'classInfo',
+        component: () => import('@/views/class/classInfo'),
+        meta: { title: '班级管理', icon:'class', roles: ['admin', 'teacher']}
+      },
+    ]
+  },
+
+
+  {
+    path: '/notice',
+    component: Layout,
+    children: [
+      {
+        path: 'noticeInfo',
+        name: 'Notice',
+        component: () => import('@/views/notice/noticeInfo'),
+        meta: { title: '公告管理', icon: 'notice', roles: ['admin'] }
+      }
+    ]
+  },
 ]
 
 

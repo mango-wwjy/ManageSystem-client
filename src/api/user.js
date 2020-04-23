@@ -9,7 +9,7 @@ export function register(data) {
 }
 
 export function updateUser(data) {
-  return http.put('/api/user', data)
+  return http.put('/api/user/modify', data)
 }
 
 export function addUser(data) {
@@ -17,11 +17,7 @@ export function addUser(data) {
 }
 
 export function deleteUser(id) {
-  return http.delete('/api/user/' + id)
-}
-
-export function updateUserPass(data) {
-  return http.put('/api/user', data)
+  return http.delete('/api/user/deleteUser/' + id)
 }
 
 export function fetchUser(query) {
