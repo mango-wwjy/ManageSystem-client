@@ -32,7 +32,7 @@
         width="180">
       </el-table-column>
       <el-table-column
-        prop="studentClass"
+        prop="className"
         label="班级">
       </el-table-column>
 
@@ -42,7 +42,7 @@
       </el-table-column>
 
       <el-table-column
-        prop="studentCollege"
+        prop="collegeName"
         label="所在学院">
       </el-table-column>
 
@@ -79,21 +79,57 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="studentInfo" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="studentInfo" label-position="left" label-width="90px" style="width: 400px; margin-left:50px;">
 
         <el-form-item label="学号" prop="studentNumber">
-          <el-input v-model="studentInfo.studentNumber" placeholder="请输入密码"/>
+          <el-input v-model="studentInfo.studentNumber" placeholder="请输入学号"/>
         </el-form-item>
 
-        <el-form-item label="姓名" prop="studentName" placeholder="请输入姓名">
-          <el-input class="filter-item" v-model="studentInfo.studentName" />
+        <el-form-item label="姓名" prop="studentName" >
+          <el-input class="filter-item" v-model="studentInfo.studentName" placeholder="请输入姓名"/>
 
         </el-form-item>
         <el-form-item label="手机号" prop="studentPhone">
           <el-input v-model="studentInfo.studentPhone"  placeholder="请输入手机号" />
         </el-form-item>
+
         <el-form-item label="邮箱" prop="studentEmail">
           <el-input v-model="studentInfo.studentEmail" placeholder="请输入邮箱"/>
+        </el-form-item>
+
+        <el-form-item label="选择学院"  prop="studentCollege">
+          <el-select v-model="studentInfo.studentCollege" @change="clickCollege" placeholder="请选择学院">
+            <el-option
+              v-for="item in collegeOptions"
+              :key="item.collegeCode"
+              :label="item.collegeName"
+              :value="item.collegeCode">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="选择班级" prop="studentClass">
+          <el-select v-model="studentInfo.studentClass" placeholder="选择班级">
+            <el-option
+              v-for="item in classOptions"
+              :key="item.classCode"
+              :label="item.className"
+              :value="item.classCode">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="入学年份" prop="studentYear">
+          <el-date-picker
+            v-model="studentInfo.studentYear"
+            type="year"
+            format="yyyy" value-format="yyyy"
+            placeholder="选择年">
+          </el-date-picker>
+        </el-form-item>
+
+        <el-form-item label="备注" prop="remark" label-width="80px">
+          <el-input v-model="studentInfo.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="请输入备注信息" />
         </el-form-item>
 
       </el-form>
@@ -114,20 +150,14 @@
 <script>
     import Pagination from '@/components/Pagination'
     import {validateIsEmail, validateIsPhone} from "../../utils/validate";
-    import {createStudentInfo, deleteStudent, fetchStudent, updateStudent} from "../../api/student"; // secondary package based on el-pagination
+    import {createStudentInfo, deleteStudent, fetchStudent, updateStudent} from "../../api/student";
+    import {getClassInfoDict, getCollegeDict} from "../../api/common"; // secondary package based on el-pagination
 
 
     export default {
         name:'StudentInfo',
         components: { Pagination },
         data() {
-            const validatePassword = (rule, value, callback) => {
-                if (value.length < 6) {
-                    callback(new Error('密码至少 6 位数'))
-                } else {
-                    callback()
-                }
-            }
             const validatePhone = (rule, value, callback) => {
                 if(value){
                     if (!validateIsPhone(value)) {
@@ -165,9 +195,19 @@
                     fuzzy:undefined
                 },
                 rules: {
+                    studentNumber:[{required: true, trigger: 'blur',message:'请输入学号'},
+                    ],
+                    studentName:[{required: true, trigger: 'blur',message:'请输入姓名'},
+                    ],
+                    studentCollege:[{required: true, trigger: 'blur',message:'请选择学院'},
+                    ],
+                    studentClass:[{required: true, trigger: 'blur',message:'选择班级'},
+                    ],
+                    studentYear:[{required: true, trigger: 'blur',message:'选择入学年份'},
+                    ],
                     studentPhone: [{ required: true, trigger: 'blur', validator: validatePhone }],
                     studentEmail: [{ required: true, trigger: 'blur', validator: validateEmail }],
-                    introduction:[{required: true, trigger: 'blur',message:'请输入个人简介'},
+                    remark:[{required: true, trigger: 'blur',message:'请输入备注信息'},
                         {max:30,message:'最多可输入100位'}
                     ]
 
@@ -192,12 +232,29 @@
                     teacherNumber:undefined,
                     remark:undefined,
                 },
+                collegeOptions:[],
+                classOptions:[]
             }
         },
         created() {
             this.getList()
+            this.initData();
         },
         methods:{
+            initData(){
+                getCollegeDict().then(response => {
+                    this.collegeOptions = response.data.data;
+                })
+            },
+            clickCollege(val){
+                console.log("--------"+val)
+                if(val){
+                    getClassInfoDict(val).then(response => {
+                        this.classOptions = response.data.data
+                    })
+                    this.studentInfo.studentClass=''
+                }
+            },
             getList() {
                 this.listLoading = true
                 fetchStudent(this.listQuery).then(response => {

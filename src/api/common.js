@@ -8,8 +8,8 @@ export function getCollegeDict(data) {
   return http.get('/api/common/collegeDict')
 }
 
-export function getClassInfoDict(data) {
-  return http.get('/api/common/classInfoDict')
+export function getClassInfoDict(val) {
+  return http.get('/api/common/classInfoDict/'+ val)
 }
 
 export function getTeacherInfoDict(data) {
