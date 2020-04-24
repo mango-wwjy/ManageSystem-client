@@ -84,8 +84,8 @@
           <el-input v-model="dataInfo.collegeCode" placeholder="请输入学院编号"/>
         </el-form-item>
 
-        <el-form-item label="学院名称" prop="collegeName" placeholder="请输入学院名称">
-          <el-input class="filter-item" v-model="dataInfo.collegeName" />
+        <el-form-item label="学院名称" prop="collegeName" >
+          <el-input class="filter-item" v-model="dataInfo.collegeName" placeholder="请输入学院名称"/>
         </el-form-item>
 
         <el-form-item label="院长" prop="collegeDean">

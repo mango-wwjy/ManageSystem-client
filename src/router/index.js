@@ -239,17 +239,27 @@ export const asyncRoutes = [
       },
     ]
   },
-
-
   {
     path: '/notice',
     component: Layout,
+    redirect: '/notice/noticeInfo',
+    name: 'notice',
+    meta: {
+      title: '公告管理',
+      icon: 'example'
+    },
     children: [
       {
+        path: 'create',
+        component: () => import('@/views/notice/createNotice'),
+        name: 'createNotice',
+        meta: { title: '发布公告', icon: 'edit' ,roles: ['admin']}
+      },
+      {
         path: 'noticeInfo',
-        name: 'Notice',
         component: () => import('@/views/notice/noticeInfo'),
-        meta: { title: '公告管理', icon: 'notice', roles: ['admin'] }
+        name: 'noticeInfo',
+        meta: { title: '公告信息', icon: 'list' }
       }
     ]
   },

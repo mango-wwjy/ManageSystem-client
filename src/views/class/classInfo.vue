@@ -43,8 +43,10 @@
       </el-table-column>
 
       <el-table-column
-        prop="manageTime"
         label="操作时间">
+        <template slot-scope="scope">
+          {{scope.row.manageTime | parseTime}}
+        </template>
       </el-table-column>
 
       <el-table-column
