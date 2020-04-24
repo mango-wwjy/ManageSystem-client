@@ -133,7 +133,7 @@
         },
         computed: {
             contentShortLength() {
-                return this.postForm.content_short.length
+                return this.postForm.noticeType.length
             },
             displayTime: {
                 // set and get is useful when the data
