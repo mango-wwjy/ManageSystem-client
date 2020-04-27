@@ -1,7 +1,7 @@
 <template>
   <el-card style="margin-bottom:20px;">
     <div slot="header" class="clearfix">
-      <span>About me</span>
+      <span>关于我</span>
     </div>
 
     <div class="user-profile">
@@ -22,30 +22,51 @@
         <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>个人简介</span></div>
         <div class="user-bio-section-body">
           <div class="text-muted">
-            JS in Computer Science from the University of Technology
+           {{user.introduction.length===0 ? '您还没有填写个人简介哦!!!' : user.introduction}}
           </div>
         </div>
       </div>
 
-      <div class="user-skills user-bio-section">
-        <div class="user-bio-section-header"><svg-icon icon-class="skill" /><span>Skills</span></div>
+      <div class="user-skills user-bio-section " v-if="user.realName">
+        <div class="user-bio-section-header"><svg-icon icon-class="skill" /><span>姓名</span></div>
         <div class="user-bio-section-body">
-          <div class="progress-item">
-            <span>Vue</span>
-            <el-progress :percentage="70" />
+          <div class="text-muted">
+            {{user.realName}}
           </div>
-          <div class="progress-item">
-            <span>JavaScript</span>
-            <el-progress :percentage="18" />
+        </div>
+      </div>
+
+      <div class="user-skills user-bio-section"  v-if="user.email">
+        <div class="user-bio-section-header"><svg-icon icon-class="skill" /><span>我的邮箱</span></div>
+        <div class="user-bio-section-body">
+          <div class="text-muted">
+            {{user.email}}
           </div>
-          <div class="progress-item">
-            <span>Css</span>
-            <el-progress :percentage="12" />
+        </div>
+      </div>
+
+      <div class="user-skills user-bio-section " v-if="user.phone">
+        <div class="user-bio-section-header"><svg-icon icon-class="skill" /><span>我的电话</span></div>
+        <div class="user-bio-section-body">
+          <div class="text-muted">
+            {{user.phone}}
           </div>
-          <div class="progress-item">
-            <span>ESLint</span>
-            <el-progress :percentage="100" status="success" />
+        </div>
+      </div>
+
+      <div class="user-skills user-bio-section " >
+        <div class="user-bio-section-header"><svg-icon icon-class="skill" /><span>我的角色</span></div>
+        <div class="user-bio-section-body">
+          <div class="text-muted">
+            {{ user.role | uppercaseFirst }}
           </div>
+        </div>
+      </div>
+
+      <div class="user-skills user-bio-section " >
+        <div class="user-bio-section-header"><svg-icon icon-class="skill" /><span>个人信息完善程度</span></div>
+        <div class="user-bio-section-body">
+          <el-progress :text-inside="true" :stroke-width="26" :percentage="percentage" :status="status"></el-progress>
         </div>
       </div>
     </div>
@@ -62,14 +83,53 @@ export default {
       type: Object,
       default: () => {
         return {
+            realName:'',
           name: '',
           email: '',
           avatar: '',
-          role: ''
+          role: '',
+          phone:'',
+            introduction:''
         }
       }
     }
-  }
+  },
+    data() {
+        return {
+            percentage:100,
+            status:'success'
+        }
+    },
+    watch:{
+        '$store.getters.introduction'(){
+            this.initInfo()
+            this.initData();
+        },
+        '$store.getters.userEmail'(){
+            this.initInfo()
+        },
+        '$store.getters.userPhone'(){
+            this.initInfo()
+        }
+    },
+
+    created() {
+      this.initData();
+    },
+    methods:{
+      initData(){
+          if(!this.user.introduction){
+              this.percentage=50
+              this.status='warning'
+          }
+
+      },
+        initInfo(){
+            this.user.phone=this.$store.getters.userPhone;
+            this.user.introduction=this.$store.getters.introduction;
+            this.user.email=this.$store.getters.userEmail;
+        }
+    }
 }
 </script>
 

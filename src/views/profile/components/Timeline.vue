@@ -7,37 +7,36 @@
           <p>{{ item.content }}</p>
         </el-card>
       </el-timeline-item>
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
     </el-timeline>
   </div>
 </template>
 
 <script>
+    import Pagination from '@/components/Pagination'
+    import {fetchTimeLine} from "../../../api/common";
 export default {
+    components: { Pagination },
   data() {
     return {
-      timeline: [
-        {
-          timestamp: '2019/4/20',
-          title: 'Update Github template',
-          content: 'PanJiaChen committed 2019/4/20 20:46'
+        timeline: [],
+        total: 0,
+        listQuery: {
+            page: 1,
+            limit: 4
         },
-        {
-          timestamp: '2019/4/21',
-          title: 'Update Github template',
-          content: 'PanJiaChen committed 2019/4/21 20:46'
-        },
-        {
-          timestamp: '2019/4/22',
-          title: 'Build Template',
-          content: 'PanJiaChen committed 2019/4/22 20:46'
-        },
-        {
-          timestamp: '2019/4/23',
-          title: 'Release New Version',
-          content: 'PanJiaChen committed 2019/4/23 20:46'
-        }
-      ]
     }
+  },
+  created() {
+        this.getList();
+  },
+  methods:{
+        getList(){
+            fetchTimeLine(this.listQuery).then(response => {
+                this.timeline = response.data.list
+                this.total =response.data.total
+            })
+        }
   }
 }
 </script>

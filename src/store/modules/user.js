@@ -66,7 +66,9 @@ const actions = {
       })
     })
   },
-
+  changeSetting({ commit }, introduction) {
+    commit('SET_INTRODUCTION', introduction)
+  },
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
@@ -88,6 +90,7 @@ const actions = {
         commit('SET_AVATAR', avatar)
         commit('SET_ROLES', roles)
         commit('SET_INTRODUCTION', introduction)
+        debugger
         resolve(data)
       }).catch(error => {
         reject(error)

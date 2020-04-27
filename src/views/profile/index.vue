@@ -10,13 +10,10 @@
         <el-col :span="18" :xs="24">
           <el-card>
             <el-tabs v-model="activeTab">
-              <el-tab-pane label="Activity" name="activity">
-                <activity />
-              </el-tab-pane>
-              <el-tab-pane label="Timeline" name="timeline">
+              <el-tab-pane label="时间轴" name="timeline">
                 <timeline />
               </el-tab-pane>
-              <el-tab-pane label="Account" name="account">
+              <el-tab-pane label="我的信息" name="account">
                 <account :user="user" />
               </el-tab-pane>
             </el-tabs>
@@ -37,11 +34,11 @@ import Account from './components/Account'
 
 export default {
   name: 'Profile',
-  components: { UserCard, Activity, Timeline, Account },
+  components: { UserCard, Timeline, Account },
   data() {
     return {
       user: {},
-      activeTab: 'activity'
+      activeTab: 'timeline'
     }
   },
   computed: {
@@ -49,7 +46,12 @@ export default {
       'realName',
       'avatar',
       'roles',
-      'userEmail'
+      'userEmail',
+        'userName',
+        'userPhone',
+        'introduction',
+
+
     ])
   },
   created() {
@@ -57,15 +59,18 @@ export default {
   },
   methods: {
     getUser() {
-      this.user = {
-        name: this.realName,
-        role: this.roles.join(' | '),
-        email: this.userEmail,
-        avatar: this.avatar
-      }
 
-        console.log(this.roles)
-        console.log(this.user.role)
+      this.user = {
+          name: this.userName ,
+          realName:this.realName,
+          role: this.roles.join(' | '),
+          email: this.userEmail,
+          avatar: this.avatar,
+          introduction:this.introduction,
+          phone:this.userPhone,
+
+
+      }
     }
   }
 }

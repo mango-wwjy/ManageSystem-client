@@ -215,7 +215,7 @@
                 }).then(function() {
                     return deleteUser(row.id);
                 }).then(response => {
-                    debugger
+
                     if(response.data.code == '0'){
                         this.msgSuccess(response.data.msg)
                     }else {

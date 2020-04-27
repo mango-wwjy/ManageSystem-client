@@ -64,7 +64,7 @@
                 this.setOptions(this.chartData)
             },
             setOptions({ expectedData, actualData } = {}) {
-                debugger
+
                 this.chart.setOption({
                     title: {
                         text: 'ECharts 入门示例'

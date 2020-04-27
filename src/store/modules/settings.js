@@ -17,9 +17,12 @@ const mutations = {
 }
 
 const actions = {
-  changeSetting({ commit }, data) {
-    commit('CHANGE_SETTING', data)
-  }
+  changeSetting({ commit }, introduction) {
+    commit('SET_INTRODUCTION', introduction)
+  },
+  SET_INTRODUCTION: (state, introduction) => {
+    state.introduction = introduction
+  },
 }
 
 export default {

@@ -44,3 +44,7 @@ export function logout() {
 export function exportUser() {
  return http.get('/api/user/exportUser')
 }
+
+export function updateUserOwn(data) {
+  return http.put('/api/user/modifyOwn', data)
+}

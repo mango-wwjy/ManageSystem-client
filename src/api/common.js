@@ -19,3 +19,6 @@ export function getTeacherInfoDict(data) {
 export function getChartInfo(data) {
   return http.get('/api/common/getChartInfo')
 }
+export function fetchTimeLine(query) {
+  return http.get('/api/timeLine/fetchTimeLineData', { params: query })
+}

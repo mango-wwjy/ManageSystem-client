@@ -53,7 +53,6 @@ export default {
     methods:{
       initData(){
           getChartInfo().then(response => {
-              debugger
               this.lineChartData = lineChartData.newVisitis
            this.lineChartData=response.data
           })

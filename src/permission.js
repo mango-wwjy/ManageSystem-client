@@ -56,7 +56,7 @@ router.beforeEach(async(to, from, next) => {
       next()
     } else {
       // other pages that do not have permission to access are redirected to the login page.
-      Message.error('账号或者密码错误或者登录超时失效')
+      //Message.error('账号或者密码错误或者登录超时失效')
       next(`/login?redirect=${to.path}`)
       NProgress.done()
     }
