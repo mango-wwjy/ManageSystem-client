@@ -47,11 +47,25 @@ server.interceptors.request.use(
 
 // response interceptor
 server.interceptors.response.use(
-  response => response,
+  response => {
+    if(response.data.msg==='session过期'){
+      Message({
+        message: 'session过期,请重新登陆',
+        type: 'error',
+        duration: 5 * 1000
+      })
+      router.push({path: '/login'});
+      location.reload()
+      return Promise.reject(new Error(response.data.msg || 'Error'))
+    }else {
+      return response
+    }
+},
   error => {
     if (error.response && error.response.status === 404) {
-      router.push('/')
+         router.push('/')
     }
+
     if(error.response && error.response.status === 400){
       Message({
         message: '获取token失败，请检查用户名和密码是否正确',

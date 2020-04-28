@@ -158,8 +158,15 @@ export const asyncRoutes = [
         path: 'noticeInfo',
         component: () => import('@/views/notice/noticeInfo'),
         name: 'noticeInfo',
-        meta: { title: '公告信息', icon: 'list' }
-      }
+        meta: { title: '公告信息', icon: 'list',roles: ['admin','teacher'] }
+      },
+      {
+        path: 'edit',
+        component: () => import('@/views/notice/editNotice'),
+        name: 'editNotice',
+        meta: { title: '编辑公告', noCache: true },
+        hidden: true
+      },
     ]
   },
 ]

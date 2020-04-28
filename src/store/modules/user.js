@@ -79,7 +79,7 @@ const actions = {
         }
         const { userName, avatar, realName, userEmail, userPhone, authId, introduction, roles } = data
         if (!roles || roles.length <= 0) {
-          reject('角色必须是非零数组！')
+          reject('权限认证失败，请重新登陆！')
         }
 
         commit('SET_REAL_NAME', realName)
