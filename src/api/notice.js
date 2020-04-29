@@ -17,3 +17,7 @@ export function fetchNoticeById(id) {
   return http.get('/api/notice/fetchNoticeById/' + id)
 }
 
+export function fetchNoticeInfoDataAll(query) {
+  return http.get('/api/notice/fetchNoticeInfoDataAll', { params: query })
+}
+

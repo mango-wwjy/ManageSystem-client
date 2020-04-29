@@ -71,6 +71,21 @@ export const constantRoutes = [
     ]
   },
 
+  {
+    path: '/noticeInfo',
+    component: Layout,
+    redirect: '/notice/noticePublic',
+    hidden: false,
+    children: [
+      {
+        path: 'noticePublic',
+        component: () => import('@/views/notice/noticePublic'),
+        name: 'noticePublic',
+        meta: { title: '公告信息', icon: 'noticePublic' }
+      }
+    ]
+  },
+
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
@@ -158,7 +173,7 @@ export const asyncRoutes = [
         path: 'noticeInfo',
         component: () => import('@/views/notice/noticeInfo'),
         name: 'noticeInfo',
-        meta: { title: '公告信息', icon: 'list',roles: ['admin','teacher'] }
+        meta: { title: '公告列表', icon: 'list',roles: ['admin','teacher'] }
       },
       {
         path: 'edit',
