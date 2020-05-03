@@ -22,7 +22,7 @@
         <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>个人简介</span></div>
         <div class="user-bio-section-body">
           <div class="text-muted">
-           {{user.introduction.length===0 ? '您还没有填写个人简介哦!!!' : user.introduction}}
+           {{user.introduction.length==null ? '您还没有填写个人简介哦!!!' : user.introduction}}
           </div>
         </div>
       </div>

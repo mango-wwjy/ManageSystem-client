@@ -144,6 +144,17 @@ aside {
   }
 }
 
+.filter-main-container {
+  padding-bottom: 10px;
+  margin-top: 20px;
+
+  .filter-item {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 10px;
+  }
+}
+
 //refine vue-multiselect plugin
 .multiselect {
   line-height: 16px;

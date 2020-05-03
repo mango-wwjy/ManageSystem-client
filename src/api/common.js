@@ -22,3 +22,7 @@ export function getChartInfo(data) {
 export function fetchTimeLine(query) {
   return http.get('/api/timeLine/fetchTimeLineData', { params: query })
 }
+
+export function getStudentInfoDict(data) {
+  return http.get('/api/common/studentInfoDict')
+}

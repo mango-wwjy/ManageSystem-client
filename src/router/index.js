@@ -125,8 +125,67 @@ export const asyncRoutes = [
         path: 'studentInfo',
         name: 'Student',
         component: () => import('@/views/student/studentInfo'),
-        meta: { title: '学生管理', icon: 'studentInfo', roles: ['admin','teacher'] }
+        meta: { title: '学生管理', icon: 'studentInfo', roles: ['admin'] }
       }
+    ]
+  },
+
+  {
+    path: '/mineStudent',
+    component: Layout,
+    children: [
+      {
+        path: 'mineStudentInfo',
+        name: 'mineStudent',
+        component: () => import('@/views/student/mineStudentInfo'),
+        meta: { title: '我的指导学生', icon: 'studentInfo', roles: ['teacher'] }
+      }
+    ]
+  },
+
+  {
+    path: '/mineClass',
+    component: Layout,
+    children: [
+      {
+        path: 'mineClassInfo',
+        name: 'mineClass',
+        component: () => import('@/views/class/mineClassInfo'),
+        meta: { title: '我的班级', icon: 'class', roles: ['teacher'] }
+      }
+    ]
+  },
+
+  {
+    path: '/subject',
+    component: Layout,
+    redirect: '/subject/subjectInfo',
+    name: 'subject',
+    meta: {
+      title: '课题管理',
+      icon: 'subject',
+      roles: ['teacher']
+    },
+    children: [
+      {
+        path: 'createSubject',
+        component: () => import('@/views/subject/createSubject'),
+        name: 'createSubject',
+        meta: { title: '发布课题', icon: 'edit' ,roles: ['teacher']}
+      },
+      {
+        path: 'mineSubjectInfo',
+        component: () => import('@/views/subject/mineSubjectInfo'),
+        name: 'mineSubjectInfo',
+        meta: { title: '我的课题', icon: 'list',roles: ['teacher'] }
+      },
+      {
+        path: 'editSubject',
+        component: () => import('@/views/subject/editSubject'),
+        name: 'editSubject',
+        meta: { title: '编辑课题', noCache: true },
+        hidden: true
+      },
     ]
   },
 
@@ -138,7 +197,7 @@ export const asyncRoutes = [
     meta: {
       title: '学院班级管理',
       icon: 'collegeAndClass',
-      roles: ['admin','teacher']
+      roles: ['admin']
     },
     children: [
       {
@@ -149,7 +208,7 @@ export const asyncRoutes = [
       {
         path: 'classInfo',
         component: () => import('@/views/class/classInfo'),
-        meta: { title: '班级管理', icon:'class', roles: ['admin', 'teacher']}
+        meta: { title: '班级管理', icon:'class', roles: ['admin']}
       },
     ]
   },
@@ -161,6 +220,7 @@ export const asyncRoutes = [
     meta: {
       title: '公告管理',
       icon: 'example',
+      roles: ['admin','teacher']
     },
     children: [
       {
