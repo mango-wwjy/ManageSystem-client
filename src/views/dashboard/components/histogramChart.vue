@@ -67,18 +67,18 @@
 
                 this.chart.setOption({
                     title: {
-                        text: 'ECharts 入门示例'
+                        text: '各学院人数情况'
                     },
                     tooltip: {},
                     legend: {
-                        data:['销量']
+                        data:['人数']
                     },
                     xAxis: {
                         data: expectedData
                     },
                     yAxis: {},
                     series: [{
-                        name: '销量',
+                        name: '人数',
                         type: 'bar',
                         data: actualData
                     }]

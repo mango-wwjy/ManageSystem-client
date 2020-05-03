@@ -48,3 +48,8 @@ export function exportUser() {
 export function updateUserOwn(data) {
   return http.put('/api/user/modifyOwn', data)
 }
+
+
+export function getMineSubject() {
+  return http.get('/api/user/getMineSubject')
+}

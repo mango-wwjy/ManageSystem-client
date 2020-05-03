@@ -24,10 +24,7 @@
   </el-col>
   <el-col :span="16">
     <div class="filter-main-container">
-      <el-input  placeholder="请输入检索内容" style="width: 800px;" class="filter-item"></el-input>
 
-      <el-button  class="filter-item"  icon="el-icon-search" circle @click="">
-      </el-button>
     </div>
     <el-row>
       <el-button type="primary" icon="el-icon-edit" @click="handleEdit">添加</el-button>
@@ -135,8 +132,10 @@
                             id:'ROOT',
                             children:tree
                         }]
+                        debugger
                         this.subjectId=tree[0].id
                         this.dataForm.subjectId=this.subjectId
+                        this.subjectNumber=tree[0].subjectNumber
                         this.dataForm.subjectName=tree[0].subjectName
                         if(this.subjectId){
                             fetchMineStudent(this.subjectId) .then(response => {
@@ -158,8 +157,12 @@
                     this.dataForm.studentNumber = this.dataForm.studentNumberList.join(',')
                 }
                 updateMineStudent(this.dataForm).then(response => {
-                    debugger
                     if(response.data.code =='0'){
+
+                        if(this.subjectNumber < this.tableData.length+this.dataForm.studentNumberList.length){
+                            this.msgWarn("您的课题人数已到达上限")
+                            return
+                        }
                         this.msgSuccess(response.data.msg)
                         this.dialogVisible = false
                         this.dataForm.studentNumberList=[]
@@ -181,6 +184,7 @@
             handleNodeClick(data,node){
                 if(data.id && data.id!='ROOT'){
                     this.subjectId=data.id
+                    this.subjectNumber=data.subjectNumber
                     this.dataForm.subjectId=this.subjectId
                     fetchMineStudent(data.id) .then(response => {
                         this.tableData=response.data.data
@@ -231,6 +235,7 @@
                    studentNumberList:[],
                     studentNumber:''
                 },
+                subjectNumber:0,
                 studentOptions:[],
                 subjectId:'',
                 defaultProps: {

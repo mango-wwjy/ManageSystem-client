@@ -16,7 +16,7 @@
           <Warning />
 
           <el-col :span="24">
-            <el-form-item style="margin-bottom: 40px;" prop="title">
+            <el-form-item style="margin-bottom: 40px;" prop="subjectName">
               <MDinput v-model="postForm.subjectName" :maxlength="100" name="name" required>
                 课题名称
               </MDinput>
@@ -65,7 +65,7 @@
           <span v-show="contentShortLength" class="word-counter">{{ contentShortLength }}words</span>
         </el-form-item>
 
-        <el-form-item prop="content" style="margin-bottom: 30px;">
+        <el-form-item prop="subjectContent" style="margin-bottom: 30px;">
           <Tinymce ref="editor" v-model="postForm.subjectContent" :height="400" />
         </el-form-item>
 
@@ -113,7 +113,7 @@
         },
         data() {
             const validateRequire = (rule, value, callback) => {
-                if (value === '') {
+                if (value == '') {
                     this.$message({
                         message: rule.field + '为必传项',
                         type: 'error'
@@ -129,9 +129,8 @@
                 loading: false,
                 userListOptions: [],
                 rules: {
-                    image_uri: [{ validator: validateRequire }],
-                    title: [{ validator: validateRequire }],
-                    content: [{ validator: validateRequire }],
+                    subjectName: [{ validator: validateRequire }],
+                    subjectContent: [{ validator: validateRequire }],
                 },
                 tempRoute: {},
                 collegeOptions:[],
@@ -208,7 +207,7 @@
                 })
             },
             draftForm() {
-                if (this.postForm.noticeContent.length === 0 || this.postForm.noticeTitle.length === 0) {
+                if (this.postForm.subjectContent.length === 0 || this.postForm.subjectName.length === 0) {
                     this.$message({
                         message: '请填写必要的标题和内容',
                         type: 'warning'

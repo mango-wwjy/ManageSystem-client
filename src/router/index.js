@@ -157,6 +157,32 @@ export const asyncRoutes = [
   },
 
   {
+    path: '/subjectPublicInfo',
+    component: Layout,
+    children: [
+      {
+        path: 'subjectPublic',
+        name: 'subjectPublicInfo',
+        component: () => import('@/views/subject/subjectPublic'),
+        meta: { title: '课题选择', icon: 'class', roles: ['user'] }
+      }
+    ]
+  },
+
+  {
+    path: '/studentSubjectInfo',
+    component: Layout,
+    children: [
+      {
+        path: 'studentSubject',
+        name: 'studentSubjectInfo',
+        component: () => import('@/views/student/studentSubject'),
+        meta: { title: '我的课题', icon: 'class', roles: ['user'] }
+      }
+    ]
+  },
+
+  {
     path: '/subject',
     component: Layout,
     redirect: '/subject/subjectInfo',

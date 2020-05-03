@@ -20,3 +20,11 @@ export function updateStudent(data) {
 export function deleteStudent(id) {
   return http.delete('/api/student/deleteStudent/' + id)
 }
+
+export function fetchSubject(query) {
+  return http.get('/api/student/fetchSubject', { params: query })
+}
+
+export function chooseSubject(id) {
+  return http.put('/api/student/chooseSubject/'+id)
+}

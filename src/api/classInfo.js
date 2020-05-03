@@ -15,3 +15,10 @@ export function updateData(data) {
 export function deleteData(id) {
   return http.delete('/api/class/deleteData/' + id)
 }
+
+export function fetchTree() {
+  return http.get('/api/class/fetchTree')
+}
+export function fetchMineClass(query) {
+  return http.get('/api/class/fetchMineClass', { params: query })
+}
