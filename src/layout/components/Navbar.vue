@@ -60,12 +60,12 @@ export default {
   },
   methods: {
       initImage(){
-          if(this.avatar.indexOf("E:/images")===-1){
+          if(this.avatar.indexOf("D:/images")===-1){
              this.imageUrl=this.avatar+'?imageView2/1/w/80/h/80'
           }else {
               let _that=this
               _that.item=this.avatar.substring(10,23)
-              this.imageUrl=require('E:/images/'+_that.item+'.jpg')
+              this.imageUrl=require('D:/images/'+_that.item+'.jpg')
           }
       } ,
     toggleSideBar() {
